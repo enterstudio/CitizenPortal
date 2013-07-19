@@ -1,0 +1,82 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Contact.ContactEmail</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="alert-box secondary radius">
+                        @Html.Raw(_Contact.ContactEmailHint)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="contactEmail">
+                        @_Contact.ContactEmailAddress
+                    </label>
+                    @Html.TextBoxFor(m => m.ContactEmail, new { @id = "contactEmail", @name = "Email" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Contact.SMTP_Server</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="smtpServer">
+                        @_Contact.SMTP_Host
+                    </label>
+                    @Html.TextBoxFor(m => m.SMTP_Host, new { @id = "smtpAddress" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="smtpPort">
+                        @_Contact.SMTP_Port
+                    </label>
+                    @Html.TextBoxFor(m => m.SMTP_Port, new { @id = "smtpPort" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="smtpUser">
+                        @_Contact.SMTP_User
+                    </label>
+                    @Html.TextBoxFor(m => m.SMTP_User, new { @id = "smtpUser" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="smtpPassword">
+                        @_Contact.SMTP_Password
+                    </label>
+                    @Html.PasswordFor(m => m.SMTP_Password, new { @id = "smtpPassword", value = Model.SMTP_Password })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="smtpEnableSSL">
+                        @_Contact.SMTP_EnableSSL
+                    </label>
+                    @Html.CheckBoxFor(m => m.SMTP_EnableSSL, new { @id = "smtpEnableSSL" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

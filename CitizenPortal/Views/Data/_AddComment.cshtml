@@ -1,0 +1,63 @@
+﻿@model CitizenPortal.Models.CommentEntity
+
+@using CitizenPortal.Resources.Views.Data
+@using Recaptcha;
+
+<div class="row">
+    <div class="twelve columns">
+        <div id="addCommentError" class="alert-box alert">
+            <div class="content"></div>
+            <a href="#" class="close">&times;</a>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Data", "AddComment", FormMethod.Post, new { id = "addComment" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    @Html.Hidden("PartitionKey", Model.PartitionKey)
+    @Html.Hidden("DatasetId", Model.DatasetId)
+
+    <div class="row">
+        <div class="twelve columns">
+            <label for="commentName">@Comment.Name</label>
+            @Html.TextBoxFor(m => m.Username, new { @id = "commentName" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns">
+            <label for="commentSubject">@Comment.Subject</label>
+            @Html.TextBoxFor(m => m.Subject, new { @id = "commentSubject" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns">
+            <label for="commentMessage">@Comment.Message</label>
+            @Html.TextAreaFor(m => m.Comment, new { @id = "commentMessage"})
+        </div>
+    </div>
+    
+    if (!string.IsNullOrEmpty(Recaptcha.RecaptchaControlMvc.PublicKey) && !string.IsNullOrEmpty(Recaptcha.RecaptchaControlMvc.PrivateKey))
+    {
+        <div class="row">
+            <div class="twelve columns">
+                <div id="captcha" class="right">
+                    @Html.Raw(Html.GenerateCaptcha("captcha", "white"))
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="twelve columns">
+            <div class="right">
+                <img id="addCommentAjaxLoader" src="@Url.Content("~/Content/Images/AjaxLoader.gif")" />
+                <input class="secondary button" type="submit" value="@Comment.Submit" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,69 @@
+﻿@model CitizenPortal.Models.Aside
+
+@using CitizenPortal.Models
+@using CitizenPortal.Resources.Views.Shared
+
+@{
+    Layout = null;
+}
+
+@if (Model.Tweets != null && Model.Tweets.Count > 0)
+{
+    <div id="asideBlockTwitter" class="asideBlock">
+        <div class="icon"></div>
+        <div class="title">
+            <h5>@_Aside.Twitter</h5>
+        </div>
+        <div class="content">
+            @foreach (FeedItem tweet in Model.Tweets)
+            {
+                <div class="tweet">
+                    @Html.Raw(tweet.Text)
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="separator"></div>
+}
+
+@if (Model.News != null && Model.News.Count > 0)
+{
+    <div id="asideBlockActu" class="asideBlock">
+        <div class="icon"></div>
+        <div class="title">
+            <h5>@_Aside.News</h5>
+        </div>
+        <div class="content">
+            @foreach (FeedItem news in Model.News)
+            {
+                <p><span><a href="@news.Link" target="_blank">@news.Title</a></span></p>
+                <p>@news.Text</p>
+                <div class="link">
+                    <a href="@news.Link" target="_blank"><img src="~/Content/Images/Link.png" /></a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="separator"></div>
+}
+
+@if (Model.LastData != null && Model.LastData.Count > 0)
+{
+    <div id="asideBlockData" class="asideBlock">
+        <div class="icon"></div>
+        <div class="title">
+            <h5>@_Aside.LastData</h5>
+        </div>
+        <div class="content">
+            @foreach (FeedItem dataset in Model.LastData)
+            {
+                <div class="item">
+                    <p><span><a href="@dataset.Link">@dataset.Title</a></span></p>
+                    <p>@dataset.Date</p>
+                </div>
+            }
+        </div>
+    </div>
+}

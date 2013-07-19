@@ -1,0 +1,303 @@
+﻿@model CitizenPortal.Models.Dataset
+
+@using CitizenPortal.Resources.Views.Data
+
+@section scripts
+{
+    <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.3"></script>
+
+    @if (ViewBag.Error == null)
+    {
+        <script>
+            var Global = {
+                Catalog: @Html.Raw(Json.Encode(Model.Catalog.Alias)),
+                Dataset: @Html.Raw(Json.Encode(Model.EntitySet)),
+                DataServiceUrl: @Html.Raw(Json.Encode(ViewBag.DataServiceUrl)),
+                DatasetUrl: @Html.Raw(Json.Encode(Model.Url)),
+                DisplayText: @Html.Raw(Json.Encode(Show.Display)),
+                HideText: @Html.Raw(Json.Encode(Show.Hide)),
+                Rating: @Html.Raw(Json.Encode(Model.Rating)),
+                UserRating: @Html.Raw(Json.Encode(ViewBag.UserRating)),
+                RatePositive: @Html.Raw(Json.Encode(Show.RatePositive)),
+                RateNegative: @Html.Raw(Json.Encode(Show.RateNegative)),
+                RateCancel: @Html.Raw(Json.Encode(Show.RateCancel))
+            };
+        </script>
+    }
+
+    <script src="@Url.Content("~/Content/Scripts/Data/Show.js")"></script>
+}
+
+<div id="dataShow" class="row">
+    @if (ViewBag.Error != null)
+    {
+        <div class="twelve columns">
+            <br />
+            <div class="alert-box alert">
+                @ViewBag.Error
+                <a href="#" class="close">&times;</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Facebook -->
+        <div id="fb-root"></div>
+        <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/@ViewBag.LanguageFull/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+        <!-- Google+ -->
+        <script>
+            window.___gcfg = {
+                lang: @Html.Raw(Json.Encode(ViewBag.LanguageFullISO))
+            };
+
+            (function () {
+                var po = document.createElement('script'); po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+
+        <!-- Twitter -->
+        <script>
+            !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");
+        </script>
+
+        <!-- LinkedIn -->
+        <script src="http://platform.linkedin.com/in.js">
+            lang: @ViewBag.LanguageFull
+        </script>
+        
+        <!-- Modal to add comment -->
+        <div id="addCommentModal" class="reveal-modal small">
+            <h2>@Show.AddComment</h2>
+            @Html.Partial("_AddComment", new CitizenPortal.Models.CommentEntity(Model.Catalog.Alias, Model.EntitySet))
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+        
+        <div class="twelve columns">
+            <div class="row">
+                <div class="six columns">
+                    <h1>@Model.Name</h1>
+                </div>
+                <div id="social" class="six columns">
+                    <div class="row">
+                        <div id="socialIcons" class="twelve columns">
+                            <!-- Facebook -->
+                            <div class="socialIcon">
+                                <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="segoe ui"></div>
+                            </div>
+
+                            <!-- Google+ -->
+                            <div class="socialIcon">
+                                <div class="g-plusone" data-size="medium"></div>
+                            </div>
+
+                            <!-- Twitter -->
+                            <div class="socialIcon">
+                                <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-hashtags="OpenData">Tweet</a>
+                            </div>
+
+                            <!-- LinkedIn -->
+                            <div class="socialIcon">
+                                <script type="IN/Share" data-counter="right" data-showzero="true"></script>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="twelve columns">
+                            <div class="right">
+                                @Html.Partial("_AddRemoveRate", new CitizenPortal.Models.RateEntity(Model.Catalog.Alias, Model.EntitySet, ViewBag.UserRating))
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="twelve columns">
+                            <div class="right">
+                                <a href="#" class="tiny secondary button" data-reveal-id="addCommentModal">@Show.AddComment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            @if (Model.KeywordsList != null)
+            {
+                <div class="row">
+                    <div class="twelve columns block">
+                        <div class="title">
+                            @Show.Keywords
+                        </div>
+                        <div class="content">
+                            @foreach (string keyword in Model.KeywordsList)
+                            {
+                                @Html.ActionLink(keyword, "Index", new { keywordFilter = keyword }, new { @class = "round secondary label" });
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="row">
+                <div class="four columns block">
+                    <div class="title">
+                        @Show.GeneralDescription
+                    </div>
+                    <div class="content">
+                        <p><b>@Show.GeneralDescriptionLicense:</b> @Show.GeneralDescriptionOpenLicense</p>
+                        @if (!string.IsNullOrEmpty(Model.Catalog.Alias))
+                        {
+                            <p><b>@Show.GeneralDescriptionCatalog:</b> @Model.Catalog.Alias</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Category))
+                        {
+                            <p><b>@Show.GeneralDescriptionCategory:</b> @Model.Category</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <p><b>@Show.GeneralDescriptionDescription:</b> @Model.Description</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.GeographicCoverage))
+                        {
+                            <p><b>@Show.GeneralDescriptionGeozone:</b> @Model.GeographicCoverage</p>
+                        }
+
+                        <p>
+                            <b>@Show.GeneralDescriptionRating:</b>
+                            <span id="rating">
+                                <i class="icon-general-star @(Model.Rating >= -3 ? "on" : "")"></i>
+                                <i class="icon-general-star @(Model.Rating >= -1 ? "on" : "")"></i>
+                                <i class="icon-general-star @(Model.Rating >= 1 ? "on" : "")"></i>
+                                <i class="icon-general-star @(Model.Rating >= 3 ? "on" : "")"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="four columns block">
+                    <div class="title">
+                        @Show.TechnicalDescription
+                    </div>
+                    <div class="content">
+                        <p><b>@Show.TechnicalDescriptionResourceType:</b> Table</p>
+                        @if (!string.IsNullOrEmpty(Model.Source))
+                        {
+                            <p><b>@Show.TechnicalDescriptionSource:</b> @Model.Source</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.ReleaseDate))
+                        {
+                            <p><b>@Show.TechnicalDescriptionPublicationDate:</b> @Model.ReleaseDate.Substring(0, 10)</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.LastUpdateDate))
+                        {
+                            <p><b>@Show.TechnicalDescriptionReleaseDate:</b> @Model.LastUpdateDate.Substring(0, 10)</p>
+                        }
+                    </div>
+                </div>
+
+                <div id="dataResources" class="four columns block">
+                    <div class="title">
+                        @Show.Resources
+                    </div>
+                    <div class="content">
+                        <div class="dlBloc">
+                            <a href="@Model.CSVLink" title="@Show.DownloadCSVTitle">
+                                <i class="icon-general-download"></i>
+                                <p>CSV</p>
+                            </a>
+                        </div>
+                        <div class="dlBloc">
+                            <a href="@Model.DaisyLink" title="@Show.DownloadDaisyTitle">
+                                <i class="icon-general-download"></i>
+                                <p>Daisy</p>
+                            </a>
+                        </div>
+                        <div class="dlBloc">
+                            <a href="@Model.Url" target="_blank" title="@Show.DownloadAtomTitle">
+                                <i class="icon-general-download"></i>
+                                <p>Atom</p>
+                            </a>
+                        </div>
+                        <div class="dlBloc">
+                            <a href="@Model.JsonLink" target="_blank" title="@Show.DownloadJSONTitle">
+                                <i class="icon-general-download"></i>
+                                <p>JSON</p>
+                            </a>
+                        </div>
+                        <div class="dlBloc" id="dlKML">
+                            <a href="@Model.KmlLink" target="_blank" title="@Show.DownloadKMLTitle">
+                                <i class="icon-general-download"></i>
+                                <p>KML</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div id="dataExtract" class="twelve columns block">
+                    <div class="title">
+                        <a class="tiny secondary button toggleExpander" title="@Show.Display"><i class="icon-general-plus"></i></a>
+                        @Show.DataExtract
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="ajaxLoader twelve columns">
+                                <img src="@Url.Content("~/Content/Images/AjaxLoader.gif")" alt="Loading..." />
+                            </div>
+                        </div>
+                        <div class="row" style="overflow-x:auto;">
+                            <div class="twelve columns">
+                                <table>
+				                    <thead>
+				                    </thead>
+				                    <tbody>
+				                    </tbody>
+				                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="twelve columns">
+                                <a id="previousData" class="left tiny secondary button" onclick="DataExtract.Load(-1)">@Show.Previous</a>
+                                <a id="nextData" class="right tiny secondary button" onclick="DataExtract.Load(1)">@Show.Next</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div id="dataVisualization" class="twelve columns block">
+                    <div class="title">
+                        <a class="tiny secondary button toggleExpander" title="@Show.Display"><i class="icon-general-plus"></i></a>
+                        @Show.DataVisualization
+                    </div>
+                    <div class="content">
+                        <div id="map_canvas" style="position: relative; width: 100%; height: 500px;"></div>
+                    </div>
+                </div>
+            </div>            
+
+            <div class="row">
+                <div id="dataComments" class="twelve columns block">
+                    <div class="title">
+                        <a class="tiny secondary button toggleExpander" title="@Show.Display"><i class="icon-general-plus"></i></a>
+                        @Show.Comments
+                    </div>
+                    <div class="content">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,24 @@
+﻿@model CitizenPortal.Models.RateEntity
+
+@using CitizenPortal.Resources.Views.Data
+
+@using (Html.BeginForm((Model.RateValue == 0 ? "AddRate" : "RemoveRate"), "Data", FormMethod.Post, new { id = "addRemoveRate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    @Html.Hidden("ItemKey", Model.ItemKey)
+    @Html.Hidden("RateValue", Model.RateValue)
+
+    <img src="~/Content/Images/AjaxLoader.gif" />
+
+    <span>@Show.Rate :</span>
+    
+    <a id="upVote" class="tiny button success radius @(Model.RateValue == 1 ? "disabled" : "")" title="@(Model.RateValue == 1 ? Show.RateCancel : Show.RatePositive)" style="@(Model.RateValue == -1 ? "display: none;" : "")">
+        <i class="icon-general-plus"></i>
+    </a>
+
+    <a id="downVote" class="tiny button alert radius @(Model.RateValue == -1 ? "disabled" : "")" title="@(Model.RateValue == -1 ? Show.RateCancel : Show.RateNegative)" style="@(Model.RateValue == 1 ? "display: none;" : "")">
+        <i class="icon-general-minus"></i>
+    </a>
+}

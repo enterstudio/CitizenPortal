@@ -1,0 +1,56 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Home.HomeContent</legend>
+
+            <div class="row">
+                <div class="twelve columns" id="homeImageContainer">
+                    @if (!string.IsNullOrEmpty(Model.HomeImageUrl))
+                    {
+                        <label>
+                            @Index.Image
+                            <span class="has-tip tip-top noradius" title="@Index.ImageTooltip"><i class="icon-general-idea"></i></span>
+                        </label>
+                        <div class="thumbnail">
+                            <img src="@Model.HomeImageUrl" alt="Home image" />
+                        </div>
+                        <div>
+                            <a href="#" class="deleteImage" data-label="@Index.Image" data-input-id="homeImage" data-input-name="HomeImage">@Index.DeleteImage</a>
+                        </div>
+                        @Html.HiddenFor(m => m.HomeImageUrl, new { @id = "homeImage" })
+                    }
+                    else
+                    {
+                        <label for="homeImage">@Index.Image</label>
+                        <input id="homeImage" name="HomeImage" type="file" />
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="homeTitle">@Index.Title</label>
+                    @Html.TextBoxFor(m => m.HomeTitle, new { @id = "homeTitle" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="homeText">
+                        @Index.Text
+                        <span class="has-tip tip-top noradius" title="@Index.TextAreaTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextAreaFor(m => m.HomeText, new { @id = "homeText" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

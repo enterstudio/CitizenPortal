@@ -1,0 +1,48 @@
+﻿@model CitizenPortal.Models.Applications
+
+@using CitizenPortal.Models
+@using CitizenPortal.Resources.Views.Applications
+
+<div id="applications" class="row">
+    <div class="main nine columns">
+        <h1>@Index.Title</h1>
+
+        @foreach (Application app in Model.AllApplications)
+        {
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="application">
+                        <div class="row">
+                            <div class="three columns">
+                                @if (string.IsNullOrEmpty(app.ImageUrl))
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Application.png")" alt="Application" />
+                                }
+                                else
+                                {
+                                    <img src="@app.ImageUrl" alt="Application" />
+                                }
+                            </div>
+                            <div class="nine columns">
+                                <div class="description">
+                                    <h6>@app.Name</h6>
+                                    <p>
+                                        @Html.Raw(app.Description)
+                                    </p>
+                                    <div class="link">
+                                        <a href="@app.Link" target="_blank">@Index.Link</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="asideBlocks three columns">
+        @{Html.RenderAction("_Aside", "_Shared");}
+    </div>
+</div>

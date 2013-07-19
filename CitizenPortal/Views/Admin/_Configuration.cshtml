@@ -1,0 +1,145 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Configuration.DataSources</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="dataServiceUrl">
+                        @_Configuration.DataServiceUrl
+                        <span class="has-tip tip-top noradius" title="@_Configuration.DataServiceTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextBoxFor(m => m.DataServiceUrl, new { @id = "dataServiceUrl" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="dataBrowserUrl">
+                        @_Configuration.DataBrowserUrl
+                        <span class="has-tip tip-top noradius" title="@_Configuration.DataBrowserTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextBoxFor(m => m.DataBrowserUrl, new { @id = "dataBrowserUrl" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+@{
+    /*   
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Configuration.WindowsAzureStorage</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="alert-box secondary radius">
+                        @Html.Raw(_Configuration.WindowsAzureStorageHint)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="azureStorageName">@_Configuration.WindowsAzureAccountName</label>
+                    @Html.TextBoxFor(m => m.AzureStorageName, new { @id = "azureStorageName" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="azureStorageKey">@_Configuration.WindowsAzureAccountKey</label>
+                    @Html.TextBoxFor(m => m.AzureStorageKey, new { @id = "azureStorageKey" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+*/}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Configuration.TwitterFeed</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="alert-box secondary radius">
+                        @Html.Raw(_Configuration.TwitterHint)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="twitterAddress">
+                        @_Configuration.TwitterAddress
+                        <span class="has-tip tip-top noradius" title="@_Configuration.TwitterAddressTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextBoxFor(m => m.TwitterAddress, new { @id = "twitterAddress" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="twitterToken">
+                        @_Configuration.TwitterToken
+                        <span class="has-tip tip-top noradius" title="@_Configuration.TwitterTokenTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextBoxFor(m => m.TwitterToken, new { @id = "twitterToken" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Configuration.RssFeed</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="rssAddress">
+                        @_Configuration.RssAddress
+                        <span class="has-tip tip-top noradius" title="@_Configuration.RssAddressTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextBoxFor(m => m.RssAddress, new { @id = "rssAddress" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_Configuration.Recaptcha</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="alert-box secondary radius">
+                        @Html.Raw(_Configuration.RecaptchaHint)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="recaptchaPublicKey">@_Configuration.RecaptchaPublicKey</label>
+                    @Html.TextBoxFor(m => m.RecaptchaPublicKey, new { @id = "recaptchaPublicKey" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="recaptchaPrivateKey">@_Configuration.RecaptchaPrivateKey</label>
+                    @Html.TextBoxFor(m => m.RecaptchaPrivateKey, new { @id = "recaptchaPrivateKey" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

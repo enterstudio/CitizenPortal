@@ -1,0 +1,170 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@section scripts {
+    <script>
+        var Global = {
+            ConfirmMessage: @Html.Raw(Json.Encode(Index.ConfirmMessage))
+        };
+    </script>
+    
+    <script src="@Url.Content("~/Content/Scripts/Admin/Index.js")"></script>
+}
+
+<div id="admin">
+    <div class="row">
+        <div class="six columns">
+            <h1>@Index.PageTitle</h1>
+        </div>
+
+        <div class="six columns" style="vertical-align: bottom;">
+            <div id="signOut" class="right">
+                <div>
+                    <h5>@(!string.IsNullOrEmpty(ViewBag.AdminFullName) ? ViewBag.AdminFullName : Index.Administrator)</h5>
+                </div>
+                <div>
+                    <a href="/">@Index.CitizenPortal</a>
+                </div>
+                <div>
+                    <a href="/Admin/SignOut">@Index.SignOut</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (IsPost)
+    {
+        <div class="row">
+            <div class="twelve columns">
+                @if (ViewData.ModelState.IsValid)
+                {
+                    <div class="alert-box success">
+                        @Index.SuccessSave
+                        <a href="" class="close">&times;</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert-box alert">
+                        @Html.ValidationSummary()
+                        <a href="" class="close">&times;</a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "saveConfig" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.Hidden("RowKey", Request.Url.Authority)
+
+        <div class="row">
+            <div class="three columns">
+                <dl class="vertical tabs">
+                    <dd class="active"><a href="#adminMenu1">@Index.Configuration</a></dd>
+                    <dd><a href="#adminMenu2">@Index.GlobalAppearance</a></dd>
+                    <dd><a href="#adminMenu3">@Index.Home</a></dd>
+                    <dd><a href="#adminMenu4">@Index.License</a></dd>
+                    <dd><a href="#adminMenu5">@Index.Approach</a></dd>
+                    <dd><a href="#adminMenu6">@Index.Applications</a></dd>
+                    <dd><a href="#adminMenu7">@Index.Contact</a></dd>
+                </dl>
+
+                <input type="submit" id="submit" class="secondary success radius button" value="Sauvegarder" />
+            </div>
+
+            <div class="nine columns">
+                <ul class="tabs-content">
+                    <li class="active" id="adminMenu1Tab">
+                        @{Html.RenderPartial("_Configuration", Model);}
+                    </li>
+                    <li id="adminMenu2Tab">
+                        @{Html.RenderPartial("_GlobalAppearance", Model);}
+                    </li>
+                    <li id="adminMenu3Tab">
+                        @{Html.RenderPartial("_Home", Model);}
+                    </li>
+                    <li id="adminMenu4Tab">
+                        @{Html.RenderPartial("_License", Model);}
+                    </li>
+                    <li id="adminMenu5Tab">
+                        @{Html.RenderPartial("_Approach", Model);}
+                    </li>
+                    <li id="adminMenu6Tab">
+                        @{Html.RenderPartial("_Applications", Model);}
+                    </li>
+                    <li id="adminMenu7Tab">
+                        @{Html.RenderPartial("_Contact", Model);}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    <form onsubmit="return false">
+        <div id="addAppModal" class="reveal-modal">
+            <h2>@_Applications.AddApp</h2>
+
+            <div class="alert-box alert">
+                @_Applications.MissingAppField
+                <a href="" class="close">&times;</a>
+            </div>
+
+            <label for="addAppName">@_Applications.Name <span class="mandatory">*</span></label>
+            <input type="text" class="appName" id="addAppName" />
+
+            <label for="addAppDescription">
+                @_Applications.Description
+                <span class="has-tip tip-top noradius" title="@_Approach.TextTooltip"><i class="icon-general-idea"></i></span>
+            </label>
+            <input type="text" class="appDescription" id="addAppDescription" />
+
+            <label for="addAppLink">@_Applications.AppLink <span class="mandatory">*</span></label>
+            <input type="text" class="appLink" id="addAppLink" />
+
+            <label for="addAppImageUrl">@_Applications.ImageUrl</label>
+            <input type="text" class="appImageUrl" id="addAppImageUrl" />
+
+            <div class="right">
+                <input type="submit" id="validAddApp" class="success radius button" value="OK" />
+            </div>
+
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+
+        <div id="editAppModal" class="reveal-modal">
+            <h2>@_Applications.EditApp</h2>
+
+            <div class="alert-box alert">
+                @_Applications.MissingAppField
+                <a href="" class="close">&times;</a>
+            </div>
+
+            <label for="editAppName">@_Applications.Name <span class="mandatory">*</span></label>
+            <input type="text" class="appName" id="editAppName" />
+
+            <label for="editAppDescription">
+                @_Applications.Description
+                <span class="has-tip tip-top noradius" title="@_Approach.TextTooltip"><i class="icon-general-idea"></i></span>
+            </label>
+            <input type="text" class="appDescription" id="editAppDescription" />
+
+            <label for="editAppLink">@_Applications.AppLink <span class="mandatory">*</span></label>
+            <input type="text" class="appLink" id="editAppLink" />
+
+            <label for="editAppImageUrl">@_Applications.ImageUrl</label>
+            <input type="text" class="appImageUrl" id="editAppImageUrl" />
+
+            <div class="right">
+                <input type="submit" id="validEditApp" class="success radius button" value="OK" />
+            </div>
+
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+    </form>
+
+</div>

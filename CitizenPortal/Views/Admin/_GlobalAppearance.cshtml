@@ -1,0 +1,95 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_GlobalAppearance.Website</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="websiteTitle">
+                        @_GlobalAppearance.WebsiteTitle
+                    </label>
+                    @Html.TextBoxFor(m => m.WebsiteTitle, new { @id = "websiteTitle" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@_GlobalAppearance.Banner</legend>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="alert-box secondary radius">
+                        @Html.Raw(_GlobalAppearance.Logo1Hint)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns" id="logo1Container">
+                    @if (!string.IsNullOrEmpty(Model.Logo1Url))
+                    {
+                        <label>
+                            @_GlobalAppearance.Logo1
+                            <span class="has-tip tip-top noradius" title="@Index.LogoTooltip"><i class="icon-general-idea"></i></span>
+                        </label>
+                        <div class="thumbnail">
+                            <img src="@Model.Logo1Url" alt="Logo 1 image" />
+                        </div>
+                        <div>
+                            <a href="#" class="deleteImage" data-label="@Index.Logo" data-input-id="logo1" data-input-name="Logo1">@Index.DeleteLogo</a>
+                        </div>
+                        @Html.HiddenFor(m => m.Logo1Url, new { @id = "logo1" })
+                    }
+                    else
+                    {
+                        <label for="logo1">@_GlobalAppearance.Logo1</label>
+                        <input id="logo1" name="Logo1" type="file" />
+                    }
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="alert-box secondary radius">
+                        @Html.Raw(_GlobalAppearance.Logo2Hint)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns" id="logo2Container">
+                    @if (!string.IsNullOrEmpty(Model.Logo2Url))
+                    {
+                        <label>
+                            @_GlobalAppearance.Logo2
+                            <span class="has-tip tip-top noradius" title="@Index.LogoTooltip"><i class="icon-general-idea"></i></span>
+                        </label>
+                        <div class="thumbnail">
+                            <img src="@Model.Logo2Url" alt="Logo 2 image" />
+                        </div>
+                        <div>
+                            <a href="#" class="deleteImage" data-label="@Index.Logo" data-input-id="logo2" data-input-name="Logo2">@Index.DeleteLogo</a>
+                        </div>
+                        @Html.HiddenFor(m => m.Logo2Url, new { @id = "logo2" })
+                    }
+                    else
+                    {
+                        <label for="logo2">@_GlobalAppearance.Logo2</label>
+                        <input id="logo2" name="Logo2" type="file" />
+                    }
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

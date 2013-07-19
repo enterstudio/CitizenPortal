@@ -1,0 +1,64 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(m => m.Applications, new { @id = "applicationsInput" })
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset id="applications">
+            <legend>@_Applications.ApplicationsList</legend>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="right">
+                        <a href="#" class="tiny button" data-reveal-id="addAppModal">@_Applications.AddApp</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div id="noApplication" class="centered">
+                        @_Applications.NoApplication
+                    </div>
+
+                    <table id="applicationList">
+                        <thead>
+                            <tr>
+                                <td class="colAction"></td>
+                                <td class="colAction"></td>
+                                <td class="colName">@_Applications.Name</td>
+                                <td class="colDescription">@_Applications.Description</td>
+                                <td class="colLink"></td>
+                                <td class="colImageUrl"></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="model">
+                                <td class="colAction remove">
+                                    <a href="#" title="@_Applications.Delete">
+                                        <i class="icon-enclosed-remove"></i>
+                                    </a>
+                                </td>
+                                <td class="colAction edit">
+                                    <a href="#" title="@_Applications.Edit">
+                                        <i class="icon-enclosed-edit"></i>
+                                    </a>
+                                </td>
+                                <td class="colName"></td>
+                                <td class="colDescription"></td>
+                                <td class="colLink"></td>
+                                <td class="colImageUrl"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

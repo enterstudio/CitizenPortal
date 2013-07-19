@@ -1,0 +1,62 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@Index.Content</legend>
+
+            <div class="row">
+                <div class="twelve columns" id="licenseImageContainer">
+                    @if (!string.IsNullOrEmpty(Model.LicenseImageUrl))
+                    {
+                        <label>
+                            @Index.Image
+                            <span class="has-tip tip-top noradius" title="@Index.ImageTooltip"><i class="icon-general-idea"></i></span>
+                        </label>
+                        <div class="thumbnail">
+                            <img src="@Model.LicenseImageUrl" alt="License image" />
+                        </div>
+                        <div>
+                            <a href="#" class="deleteImage" data-label="@Index.Image" data-input-id="licenseImage" data-input-name="LicenseImage">@Index.DeleteImage</a>
+                        </div>
+                        @Html.HiddenFor(m => m.LicenseImageUrl, new { @id = "licenseImage" })
+                    }
+                    else
+                    {
+                        <label for="licenseImage">@Index.Image</label>
+                        <input id="licenseImage" name="LicenseImage" type="file" />
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="licenseText">
+                        @Index.Text
+                        <span class="has-tip tip-top noradius" title="@Index.TextAreaTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextAreaFor(m => m.LicenseText, new { @id = "licenseText" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@Index.Rendering</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <div id="licenseRender"></div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

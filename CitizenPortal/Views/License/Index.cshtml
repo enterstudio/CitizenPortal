@@ -1,0 +1,21 @@
+﻿@using CitizenPortal.Helper
+@using CitizenPortal.Resources.Views.License
+
+<div class="row">
+    <div class="main nine columns">
+        <h1>@Index.Title</h1>
+        @if (!string.IsNullOrEmpty(@ConfigHelper.Config.LicenseImageUrl))
+        {
+            <div class="centered">
+                <img src="@ConfigHelper.Config.LicenseImageUrl" alt="license image" />
+            </div>
+        }
+        <div>
+            @Html.Raw(ConfigHelper.Config.LicenseText)
+        </div>
+    </div>
+
+    <div class="asideBlocks three columns">
+        @{Html.RenderAction("_Aside", "_Shared");}
+    </div>
+</div>

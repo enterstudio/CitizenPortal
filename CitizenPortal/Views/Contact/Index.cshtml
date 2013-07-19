@@ -1,0 +1,82 @@
+﻿@model CitizenPortal.Models.Contact
+
+@using CitizenPortal.Resources.Views.Contact
+@using Recaptcha;
+
+<div id="contact" class="row">
+    <div class="main nine columns">
+        <h1>@Index.Title</h1>
+
+        @if (IsPost)
+        {
+            if (ViewData.ModelState.IsValid)
+            {
+                <div class="alert-box success">
+                    @Index.FormSuccess
+                    <a href="" class="close">&times;</a>
+                </div>
+            }
+            else
+            {
+                <div class="alert-box alert">
+                    @Html.ValidationSummary()
+                    <a href="" class="close">&times;</a>
+                </div>
+            }
+        }
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="row">
+        <div class="twelve columns">
+            <label for="contactName">@Index.Name</label>
+            @Html.TextBoxFor(m => m.Name, new { @id = "contactName"})
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns">
+            <label for="contactEmail">@Index.Email</label>
+            @Html.TextBoxFor(m => m.Email, new { @id = "contactEmail"})
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns">
+            <label for="contactSubject">@Index.Subject</label>
+            @Html.TextBoxFor(m => m.Subject, new { @id = "contactSubject"})
+        </div>
+    </div>
+
+        <div class="row">
+        <div class="twelve columns">
+            <label for="contactMessage">@Index.Message</label>
+            @Html.TextAreaFor(m => m.Message, new { @id = "contactMessage"})
+        </div>
+    </div>
+    
+    if (!string.IsNullOrEmpty(Recaptcha.RecaptchaControlMvc.PublicKey) && !string.IsNullOrEmpty(Recaptcha.RecaptchaControlMvc.PrivateKey))
+    {
+        <div class="row">
+            <div class="twelve columns">
+                <div id="captcha" class="right">
+                    @Html.Raw(Html.GenerateCaptcha("captcha", "white"))
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="twelve columns">
+            <input class="secondary button right" type="submit" value="@Index.Submit" />
+        </div>
+    </div>
+}
+    </div>
+
+    <div class="asideBlocks three columns">
+        @{Html.RenderAction("_Aside", "_Shared");}
+    </div>
+</div>

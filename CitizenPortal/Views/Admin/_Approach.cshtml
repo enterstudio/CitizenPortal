@@ -1,0 +1,62 @@
+﻿@model CitizenPortal.Models.ConfigEntity
+
+@using CitizenPortal.Resources.Views.Admin
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@Index.Content</legend>
+
+            <div class="row">
+                <div class="twelve columns" id="approachImageContainer">
+                    @if (!string.IsNullOrEmpty(Model.ApproachImageUrl))
+                    {
+                        <label>
+                            @Index.Image
+                            <span class="has-tip tip-top noradius" title="@Index.ImageTooltip"><i class="icon-general-idea"></i></span>
+                        </label>
+                        <div class="thumbnail">
+                            <img src="@Model.ApproachImageUrl" alt="Approach image" />
+                        </div>
+                        <div>
+                            <a href="#" class="deleteImage" data-label="@Index.Image" data-input-id="approachImage" data-input-name="ApproachImage">@Index.DeleteImage</a>
+                        </div>
+                        @Html.HiddenFor(m => m.ApproachImageUrl, new { @id = "approachImage" })
+                    }
+                    else
+                    {
+                        <label for="approachImage">@Index.Image</label>
+                        <input id="approachImage" name="ApproachImage" type="file" />
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="approachText">
+                        @Index.Text
+                        <span class="has-tip tip-top noradius" title="@_Approach.TextTooltip"><i class="icon-general-idea"></i></span>
+                    </label>
+                    @Html.TextAreaFor(m => m.ApproachText, new { @id = "approachText" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <fieldset>
+            <legend>@Index.Rendering</legend>
+            <div class="row">
+                <div class="twelve columns">
+                    <div id="approachRender"></div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

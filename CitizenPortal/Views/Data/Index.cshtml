@@ -1,0 +1,233 @@
+﻿@model CitizenPortal.Models.Data
+
+@using CitizenPortal.Helper
+@using CitizenPortal.Resources.Views.Data
+
+@section scripts
+{
+    <script>
+        var Global = {
+            DisplayAll: @Html.Raw(Json.Encode(Index.DisplayAll)),
+            Hide: @Html.Raw(Json.Encode(Index.Hide))
+        };
+    </script>
+
+    <script src="@Url.Content("~/Content/Scripts/Data/Index.js")"></script>
+}
+
+<div id="data">
+    <div class="row">
+        <div class="twelve columns">
+            <h1>@Index.Title</h1>
+        </div>
+    </div>
+
+    @if (Model.Datasets == null)
+    {
+        <div class="row">
+            <div class="twelve columns centered">
+                <h4>@Index.NoDataset</h4>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div id="datasets" class="nine columns">
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="nameCell">
+                                @Html.ActionLink(Index.DatasetName, "Index", new { sortOrder = ViewBag.NameSortParam, catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter })
+                                @if (ViewBag.CurrentSort == null)
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Arrow_asc.png")" />
+                                }
+                                else if (ViewBag.CurrentSort == "Name desc")
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Arrow_desc.png")" />
+                                }
+                            </td>
+                            <td class="descCell">
+                                @Index.DatasetDescription
+                            </td>
+                            <td class="rateCell">
+                                @Index.Rating
+                            </td>
+                            <td class="dateCell">
+                                @Html.ActionLink(Index.DatasetReleaseDate, "Index", new { sortOrder = ViewBag.DateSortParam, catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter })
+                                @if (ViewBag.CurrentSort == "Date")
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Arrow_asc.png")" />
+                                }
+                                else if (ViewBag.CurrentSort == "Date desc")
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Arrow_desc.png")" />
+                                }
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dataset in Model.Datasets)
+                        {
+                            <tr>
+                                <td class="nameCell">
+                                    @Html.ActionLink(dataset.Name.Length > 24 ? dataset.Name.Substring(0, 24) + "..." : dataset.Name, "Show", new { catalogName = dataset.Catalog.Alias, datasetName = dataset.EntitySet }, new { @title = dataset.Name })
+                                </td>
+                                <td class="descCell">
+                                    <span title="@dataset.Description">@(dataset.Description.Length > 60 ? dataset.Description.Substring(0, 60) + "..." : dataset.Description)</span>
+                                </td>
+                                <td class="rateCell">
+                                    <i class="icon-general-star @(dataset.Rating >= -3 ? "on" : "")"></i>
+                                    <i class="icon-general-star @(dataset.Rating >= -1 ? "on" : "")"></i>
+                                    <i class="icon-general-star @(dataset.Rating >= 1 ? "on" : "")"></i>
+                                    <i class="icon-general-star @(dataset.Rating >= 3 ? "on" : "")"></i>
+                                </td>
+                                <td class="dateCell">
+                                    @(dataset.ReleaseDate.Length > 10 ? dataset.ReleaseDate.Substring(0, 10) : dataset.ReleaseDate)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (ViewBag.TotalPage > 1)
+                {
+                    <div class="pagination-centered">
+                        <ul class="pagination">
+                            <li class="arrow @(ViewBag.CurrentPage == 1 ? "unavailable" : "")">@Html.ActionLink("«", "Index", new { page = (ViewBag.CurrentPage > 1 ? ViewBag.CurrentPage - 1 : 1), sortOrder = ViewBag.CurrentSort, catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter })</li>
+                            @{bool wasUnavailable = false;}
+                            @for (int cnt = 1; cnt <= ViewBag.TotalPage; ++cnt)
+                            {
+                                if (cnt <= 2 || ViewBag.TotalPage - cnt <= 1 || Math.Abs(ViewBag.CurrentPage - cnt) <= 2)
+                                {
+                                    <li @(ViewBag.CurrentPage == cnt ? "class=current" : "")>@Html.ActionLink(cnt.ToString(), "Index", new { page = cnt, sortOrder = ViewBag.CurrentSort, catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter })</li>
+                                    { wasUnavailable = false; }
+                                }
+                                else if (!wasUnavailable)
+                                {
+                                    <li class="unavailable"><a>&hellip;</a></li>
+                                    { wasUnavailable = true; }
+                                }
+                            }
+                            <li class="arrow @(ViewBag.CurrentPage == ViewBag.TotalPage ? "unavailable" : "")">@Html.ActionLink("»", "Index", new { page = (ViewBag.CurrentPage < ViewBag.TotalPage ? ViewBag.CurrentPage + 1 : ViewBag.TotalPage), sortOrder = ViewBag.CurrentSort, catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter })</li>
+                        </ul>
+                    </div>
+                }
+            </div>
+
+            <div id="filtering" class="three columns block">
+                <div class="title">
+                    @Index.Filtering
+                </div>
+
+                <div class="content">
+
+                    @if (ViewBag.CatalogFilter != null)
+                    {
+                        <div class="filterBlock">
+                            <div class="subtitle">
+                                @Index.FilterCatalog
+                            </div>
+                            <div class="filtered">
+                                @Html.ActionLink("[x]", "Index", new { categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter }, new { @title = Index.DeleteFilter }) @ViewBag.CatalogFilter
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Catalogs.Count() > 0)
+                    {
+                        <div class="filterBlock">
+                            <div class="subtitle">
+                                @Index.FilterCatalog
+                            </div>
+                            <div class="filterList">
+                                <ul>
+                                    @foreach (var catalog in Model.Catalogs)
+                                    {
+                                        <li>
+                                            @Html.ActionLink((catalog.Value.Length > 18 ? catalog.Value.Substring(0, 18) + "..." : catalog.Value), "Index", new { catalogFilter = catalog.Value, categoryFilter = ViewBag.CategoryFilter, keywordFilter = ViewBag.KeywordFilter }, new { @title = catalog.Description }) (@catalog.Counter)
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            @if (Model.Catalogs.Count() > 11)
+                            {
+                                <div class="showAll secondary tiny button">
+                                    @Index.DisplayAll
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if (ViewBag.CategoryFilter != null)
+                    {
+                        <div class="filterBlock">
+                            <div class="subtitle">
+                                @Index.FilterCategory
+                            </div>
+                            <div class="filtered">
+                                @Html.ActionLink("[x]", "Index", new { catalogFilter = ViewBag.CatalogFilter, keywordFilter = ViewBag.KeywordFilter }, new { @title = Index.DeleteFilter }) @ViewBag.CategoryFilter
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Categories.Count() > 0)
+                    {
+                        <div class="filterBlock">
+                            <div class="subtitle">
+                                @Index.FilterCategory
+                            </div>
+                            <div class="filterList">
+                                <ul>
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <li>@Html.ActionLink((category.Value.Length > 18 ? category.Value.Substring(0, 18) + "..." : category.Value), "Index", new { catalogFilter = ViewBag.CatalogFilter, categoryFilter = category.Value, keywordFilter = ViewBag.KeywordFilter }, new { @title = category.Value}) (@category.Counter)</li>
+                                    }
+                                </ul>
+                            </div>
+                            @if (Model.Categories.Count() > 11)
+                            {
+                                <div class="showAll secondary tiny button">
+                                    @Index.DisplayAll
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if (ViewBag.KeywordFilter != null)
+                    {
+                        <div class="filterBlock">
+                            <div class="subtitle">
+                                @Index.FilterKeyword
+                            </div>
+                            <div class="filtered">
+                                @Html.ActionLink("[x]", "Index", new { catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter }, new { @title = Index.DeleteFilter }) @ViewBag.KeywordFilter
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Keywords.Count() > 0)
+                    {
+                        <div class="filterBlock">
+                            <div class="subtitle">
+                                @Index.FilterKeyword
+                            </div>
+                            <div class="filterList">
+                                <ul>
+                                    @foreach (var keyword in Model.Keywords)
+                                    {
+                                        <li>@Html.ActionLink((keyword.Value.Length > 18 ? keyword.Value.Substring(0, 18) + "..." : keyword.Value), "Index", new { catalogFilter = ViewBag.CatalogFilter, categoryFilter = ViewBag.CategoryFilter, keywordFilter = keyword.Value }, new { @title = keyword.Value}) (@keyword.Counter)</li>
+                                    }
+                                </ul>
+                            </div>
+                            @if (Model.Keywords.Count() > 11)
+                            {
+                                <div class="showAll secondary tiny button">
+                                    @Index.DisplayAll
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
