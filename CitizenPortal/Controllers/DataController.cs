@@ -25,16 +25,15 @@ namespace CitizenPortal.Controllers
             {
                 return View(data);
             }
-
             data.Datasets = (from d in DataHelper.AllDatasets
                              where (string.IsNullOrEmpty(catalogFilter) || (!string.IsNullOrEmpty(d.Catalog.Alias) && d.Catalog.Alias.ToLower() == catalogFilter.ToLower()))
                              && (string.IsNullOrEmpty(categoryFilter) || (!string.IsNullOrEmpty(d.Category) && d.Category.ToLower() == categoryFilter.ToLower()))
                              && (string.IsNullOrEmpty(keywordFilter) || (d.KeywordsList != null && d.KeywordsList.Contains(keywordFilter.ToLower())))
                              select d).Select(d =>
                              {
-                                d.Rating = DataHelper.AllRates.Where(r => r.ItemKey == string.Format("{0}||{1}", d.Catalog.Alias, d.EntitySet)).Sum(r => r.RateValue);
-                                return d;
-                            });
+                                 d.Rating = DataHelper.AllRates.Where(r => r.ItemKey == string.Format("{0}||{1}", d.Catalog.Alias, d.EntitySet)).Sum(r => r.RateValue);
+                                 return d;
+                             });
 
             data.Catalogs = from d in data.Datasets
                             group d by d.Catalog into g
@@ -43,7 +42,7 @@ namespace CitizenPortal.Controllers
             data.Categories = from d in data.Datasets
                               group d by d.Category into g
                               select new Data.DatasetProperty { Value = g.Key, Counter = g.Count() };
-            
+
             data.Keywords = from d in data.Datasets
                             where d.KeywordsList != null
                             from e in d.KeywordsList
@@ -96,12 +95,14 @@ namespace CitizenPortal.Controllers
         {
             RecaptchaControlMvc.PublicKey = ConfigHelper.Config.RecaptchaPublicKey;
             RecaptchaControlMvc.PrivateKey = ConfigHelper.Config.RecaptchaPrivateKey;
+            ViewBag.Culture = System.Threading.Thread.CurrentThread.CurrentUICulture.ToString();
 
             try
             {
                 Dataset dataset = (from d in DataHelper.AllDatasets
                                    where (d.Catalog.Alias == catalogName) && (d.EntitySet == datasetName)
-                                   select d).Select(d => {
+                                   select d).Select(d =>
+                                   {
                                        d.Rating = DataHelper.AllRates.Where(r => r.ItemKey == string.Format("{0}||{1}", d.Catalog.Alias, d.EntitySet)).Sum(r => r.RateValue);
                                        return d;
                                    }).First();
@@ -121,6 +122,9 @@ namespace CitizenPortal.Controllers
 
                 // Set specific title
                 ViewBag.Title = datasetName;
+
+                // Set Bing Credential 
+                ViewBag.BingCredential = System.Configuration.ConfigurationManager.AppSettings["bingCredential"];
 
                 return View(dataset);
             }

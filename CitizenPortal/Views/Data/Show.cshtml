@@ -4,7 +4,8 @@
 
 @section scripts
 {
-    <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.3"></script>
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&mkt=@ViewBag.Culture"></script>
+    <script src="KmlMapParser.js"></script> 
 
     @if (ViewBag.Error == null)
     {
@@ -21,7 +22,7 @@
                 RatePositive: @Html.Raw(Json.Encode(Show.RatePositive)),
                 RateNegative: @Html.Raw(Json.Encode(Show.RateNegative)),
                 RateCancel: @Html.Raw(Json.Encode(Show.RateCancel))
-            };
+                };
         </script>
     }
 
@@ -57,7 +58,7 @@
         <script>
             window.___gcfg = {
                 lang: @Html.Raw(Json.Encode(ViewBag.LanguageFullISO))
-            };
+                };
 
             (function () {
                 var po = document.createElement('script'); po.async = true;
@@ -73,16 +74,16 @@
 
         <!-- LinkedIn -->
         <script src="http://platform.linkedin.com/in.js">
-            lang: @ViewBag.LanguageFull
+            lang: @ViewBag.LanguageFull;
         </script>
-        
+
         <!-- Modal to add comment -->
         <div id="addCommentModal" class="reveal-modal small">
             <h2>@Show.AddComment</h2>
             @Html.Partial("_AddComment", new CitizenPortal.Models.CommentEntity(Model.Catalog.Alias, Model.EntitySet))
             <a class="close-reveal-modal">&#215;</a>
         </div>
-        
+
         <div class="twelve columns">
             <div class="row">
                 <div class="six columns">
@@ -108,11 +109,12 @@
 
                             <!-- LinkedIn -->
                             <div class="socialIcon">
-                                <script type="IN/Share" data-counter="right" data-showzero="true"></script>
+                                <script type="IN/Share" data-counter="right" data-showzero="true">
+                                </script>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="twelve columns">
                             <div class="right">
@@ -130,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            
+
             @if (Model.KeywordsList != null)
             {
                 <div class="row">
@@ -216,7 +218,7 @@
                                 <p>CSV</p>
                             </a>
                         </div>
-                        <div class="dlBloc">
+                        <div class="dlBloc" id="dlDaisy">
                             <a href="@Model.DaisyLink" title="@Show.DownloadDaisyTitle">
                                 <i class="icon-general-download"></i>
                                 <p>Daisy</p>
@@ -228,6 +230,7 @@
                                 <p>Atom</p>
                             </a>
                         </div>
+                        <br/>
                         <div class="dlBloc">
                             <a href="@Model.JsonLink" target="_blank" title="@Show.DownloadJSONTitle">
                                 <i class="icon-general-download"></i>
@@ -240,16 +243,23 @@
                                 <p>KML</p>
                             </a>
                         </div>
+                        <div class="dlBloc" >
+                            <a href="@Model.RDFLink" target="_blank" title="@Show.DownloadRDFTitle">
+                                <i class="icon-general-download"></i>
+                                <p>RDF</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div id="dataExtract" class="twelve columns block">
                     <div class="title">
                         <a class="tiny secondary button toggleExpander" title="@Show.Display"><i class="icon-general-plus"></i></a>
                         @Show.DataExtract
                     </div>
+                    <div id="column" class="content"><h6>@Show.ColumnDisplayed</h6><p id="column_p"></p></div>
                     <div class="content">
                         <div class="row">
                             <div class="ajaxLoader twelve columns">
@@ -259,11 +269,10 @@
                         <div class="row" style="overflow-x:auto;">
                             <div class="twelve columns">
                                 <table>
-				                    <thead>
-				                    </thead>
-				                    <tbody>
-				                    </tbody>
-				                </table>
+                                    <thead>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="row">
@@ -275,7 +284,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div id="dataVisualization" class="twelve columns block">
                     <div class="title">
@@ -284,9 +293,10 @@
                     </div>
                     <div class="content">
                         <div id="map_canvas" style="position: relative; width: 100%; height: 500px;"></div>
+                        <label hidden="hidden" style="display:none;" id="bmc">@ViewBag.BingCredential</label>
                     </div>
                 </div>
-            </div>            
+            </div>
 
             <div class="row">
                 <div id="dataComments" class="twelve columns block">

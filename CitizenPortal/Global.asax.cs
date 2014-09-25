@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using System.Globalization;
-using System.IdentityModel.Claims;
 using System.IdentityModel.Tokens;
 using System.Threading;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace CitizenPortal
 {
@@ -23,10 +22,7 @@ namespace CitizenPortal
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
             RefreshValidationSettings();
-        
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
         }
 
         protected void Application_BeginRequest()
@@ -48,9 +44,13 @@ namespace CitizenPortal
 
         protected void RefreshValidationSettings()
         {
-            string configPath = AppDomain.CurrentDomain.BaseDirectory + "\\" + "Web.config";
-            string metadataAddress = ConfigurationManager.AppSettings["ida:FederationMetadataLocation"];
-            ValidatingIssuerNameRegistry.WriteToConfig(metadataAddress, configPath);
+            if (!RoleEnvironment.IsAvailable)
+            {
+                string configPath = AppDomain.CurrentDomain.BaseDirectory + "\\" + "Web.config";
+                string metadataAddress = ConfigurationManager.AppSettings["FederationMetadataLocation"];
+                ValidatingIssuerNameRegistry.WriteToConfig(metadataAddress, configPath);
+            }
+            // else { // See WebRole.cs file }
         }
     }
 }

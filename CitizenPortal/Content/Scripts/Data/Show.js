@@ -109,7 +109,7 @@ function AddComment() {
 ** Rating object
 */
 var Rating = {
-    _starIndex: [ -3, -1, 1, 3 ],
+    _starIndex: [-3, -1, 1, 3],
     Init: function () {
         if ($('#addRemoveRate').attr('action') == '/Data/AddRate') {
             // Set click events
@@ -234,13 +234,15 @@ var Rating = {
     }
 };
 
+var _columns = null;
+var headers = [];
 /*
 ** DataExtract object
 */
 var DataExtract = {
     _page: 0,
     _resultPerPage: 12,
-    _ignoredKeys: [ 'PartitionKey', 'RowKey', 'Timestamp', 'entityid' ],
+    _ignoredKeys: ['PartitionKey', 'RowKey', 'Timestamp', 'entityid'],
     Load: function (pageOperation) {
         // Show ajax loader
         $('#dataExtract .ajaxLoader').show();
@@ -250,28 +252,64 @@ var DataExtract = {
             this._page += pageOperation;
         }
 
-        // Build URL
-        var jsonUrl = Global.DatasetUrl + '?format=json&callback=?&$top=' + this._resultPerPage + '&$skip=' + (this._page * 12);
-        $.getJSON(jsonUrl, null, function (data) {
-            // Parse headers
-            var headers = [];
-            $.each(data.d, function (ndx, entity) {
-                $.each(entity, function (key, val) {
-                    var header = $.trim(key);
-                    if ($.inArray(header, DataExtract._ignoredKeys) == -1 && $.inArray(header, headers) == -1) {
-                        headers.push(header);
-                    }
+
+        //Init Columns state
+        if (_columns == null) {
+            _columns = new Array();
+            $.getJSON(Global.DatasetUrl + '?format=json&callback=?&$top=100', null, function (data) {
+                // Parse headers
+                $.each(data.d, function (ndx, entity) {
+                    $.each(entity, function (key, val) {
+                        var header = $.trim(key);
+                        if ($.inArray(header, DataExtract._ignoredKeys) == -1 && $.inArray(header, headers) == -1) {
+                            headers.push(header);
+                        }
+                    });
                 });
+
+                //Init _Columns
+                $.each(headers, function (ndx, header) {
+                    $("#column_p").append($('<a id=\"' + ndx + '\" class=\"round secondary-hold label\" onclick=\"btn_click_column(this.id)\">').html(header));
+                    _columns.push(true);
+                });
+
+                // Hide ajax loader
+                $('#dataExtract .ajaxLoader').hide();
+
+                DataExtract.UpdateTable();
+            });
+
+
+        }
+            //Display buttons columns selected
+        else {
+            $('#column_p').empty();
+            $.each(headers, function (ndx, header) {
+                if (_columns[ndx] == true)
+                    $("#column_p").append($('<a id=\"' + ndx + '\" class=\"round secondary-hold label\" onclick=\"btn_click_column(this.id)\">').html(header));
+                else
+                    $("#column_p").append($('<a id=\"' + ndx + '\" class=\"round secondary label\" onclick=\"btn_click_column(this.id)\">').html(header));
             });
 
             // Hide ajax loader
             $('#dataExtract .ajaxLoader').hide();
 
+            DataExtract.UpdateTable();
+        }
+    },
+    UpdateTable: function () {
+        // Build URL
+        var jsonUrl = Global.DatasetUrl + '?format=json&callback=?&$top=' + this._resultPerPage + '&$skip=' + (this._page * 12);
+        $.getJSON(jsonUrl, null, function (data) {
             // Display headers
             $('#dataExtract table thead').empty();
+
             var thead = $('<tr>');
             $.each(headers, function (ndx, header) {
-                thead.append($('<th>').html(header));
+                if (_columns[ndx] == true)
+                    thead.append($('<th name="column' + ndx + '">').html(header));
+                else
+                    thead.append($('<th name="column' + ndx + '" style="display:none">').html(header));
             });
             $('#dataExtract table thead').append(thead);
 
@@ -280,7 +318,10 @@ var DataExtract = {
             $.each(data.d, function (ndx, content) {
                 var tbody = $('<tr>');
                 $.each(headers, function (ndx, header) {
-                    tbody.append($('<td>').html(content[header]));
+                    if (_columns[ndx] == true)
+                        tbody.append($('<td name="column' + ndx + '">').html(content[header]));
+                    else
+                        tbody.append($('<td name="column' + ndx + '" style="display:none">').html(content[header]));
                 });
                 $('#dataExtract table tbody').append(tbody);
             });
@@ -302,39 +343,66 @@ var DataExtract = {
     }
 };
 
+
+function btn_click_column(column) {
+    if (isHold(column)) {
+        document.getElementById(column).className = "round secondary label";
+        _columns[column] = false;
+        $("[name=column" + column + "]").each(function (ndx) {
+            this.style.display = "none";
+        });
+    }
+    else {
+        document.getElementById(column).className = "round secondary-hold label";
+        _columns[column] = true;
+        $("[name=column" + column + "]").each(function (ndx) {
+            this.style.display = "table-cell";
+        });
+    }
+
+}
+
+function isHold(data) {
+    if (document.getElementById(data).className.indexOf("hold", 0) != -1)
+        return true;
+    else return false;
+}
+
+
+var _map = null;
 /*
 ** DataVisualization object
 */
 var DataVisualization = {
-    _map: null,
-    _url: Global.DatasetUrl + "?format=kml&$top=100",
+    _url: Global.DatasetUrl + "?format=json&$top=100",
     _isLoaded: false,
     Load: function (mustReload) {
         if (!this._isLoaded) {
             // Create map object
-            if (this._map == null) { this._map = new VEMap('map_canvas'); }
-
-            // Load map
-            this._map.LoadMap();
-
-            // Handle KML layer
-            var layer = new VEShapeLayer();
-            var veLayerSpec = new VEShapeSourceSpecification(VEDataType.ImportXML, this._url, layer);
-
-            // Display pushpins
-            this._map.ImportShapeLayerData(veLayerSpec, DataVisualization.SetCustomPushpin, true);
+            if (_map == null) { var bc = document.getElementById("bmc"); _map = new Microsoft.Maps.Map(document.getElementById('map_canvas'), { credentials: bc.textContent, enableSearchLogo: false, height: 450, width: 862 }); }
+            $.getJSON(this._url + '&callback=?', function (data) {
+                if (data.d.length > 0 && data.d[0].latitude && data.d[0].longitude) {
+                    if (whatDecimalSeparator(data.d[0].latitude) == ',')
+                        for (var i = 0; i < data.d.length; i++) {
+                            _map.entities.push(new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(parseFloat(data.d[i].latitude.replace(',', '.')).toFixed(10), parseFloat(data.d[i].longitude.replace(',', '.')).toFixed(10))));
+                        }
+                    else
+                        for (var i = 0; i < data.d.length; i++) {
+                            _map.entities.push(new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(parseFloat(data.d[i].latitude).toFixed(10), parseFloat(data.d[i].longitude).toFixed(10))));
+                        }
+                }
+                DataVisualization.SetCustomView(_map.entities);
+            });
         }
         this._isLoaded = mustReload;
     },
-    SetCustomPushpin: function (veShapeLayer) {
-        var shapeCount = veShapeLayer.GetShapeCount();
+    SetCustomView: function (data) {
+        var shapeCount = data.getLength();
+        _map.setView({ center: data.get(0).getLocation(), zoom: 11 });
         if (shapeCount > 0) {
             $('#dataVisualization').show();
             $('.dlBloc').css('padding-left', '4px').css('padding-right', '4px');
             $('#dlKML').css('display', 'inline-block');
-            for (var i = 0; i < shapeCount; ++i) {
-                veShapeLayer.GetShapeByIndex(i).SetCustomIcon("<img src='../../../Content/Images/pushpin.png' />");
-            }
         }
         else {
             $('#dataVisualization').hide();
@@ -343,6 +411,16 @@ var DataVisualization = {
         }
     }
 };
+
+/// <summary>
+/// This function find the decimal separator used in the json file
+/// </summary>
+function whatDecimalSeparator(data) {
+    if (data.indexOf(',') != -1)
+        return ',';
+    else return '.';
+}
+
 
 /*
 ** DataComments object

@@ -50,6 +50,15 @@ namespace CitizenPortal.Models
             }
         }
 
+        public string RDFLink
+        {
+            get
+            {
+                return this.Url + "?format=rdf";
+            }
+        }
+
+
         public string CSVLink
         {
             get

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="CitizenPortal.Cloud" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
+  <WebRole name="CitizenPortal" vmsize="Small">
+    <Runtime executionContext="elevated" />
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+    </Endpoints>
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <ConfigurationSettings>
+      <Setting name="FederationMetadataLocation" />
+      <Setting name="audienceUri" />
+      <Setting name="trustedIssuerName" />
+      <Setting name="issuer" />
+      <Setting name="realm" />
+      <Setting name="connectionString" />
+      <Setting name="bingCredential" />
+    </ConfigurationSettings>
+  </WebRole>
+</ServiceDefinition>

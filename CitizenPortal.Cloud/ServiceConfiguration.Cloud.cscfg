@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="CitizenPortal.Cloud" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2014-06.2.4">
+  <Role name="CitizenPortal">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=[StorageName];AccountKey=[StorageKey]" />
+      <Setting name="FederationMetadataLocation" value="https://login.windows.net/[AADName]/FederationMetadata/2007-06/FederationMetadata.xml" />
+      <Setting name="audienceUri" value="http://[ServiceDNS].cloudapp.net/" />
+      <Setting name="trustedIssuerName" value="https://sts.windows.net/[AADName]/" />
+      <Setting name="issuer" value="https://login.windows.net/[AADName]/wsfed" />
+      <Setting name="realm" value="http://[ServiceDNS].cloudapp.net/" />
+      <Setting name="connectionString" value="DefaultEndpointsProtocol=https;AccountName=[StorageName];AccountKey=[StorageKey]"/>
+      <Setting name="bingCredential" value="[BingCredential]"/>
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

@@ -42,23 +42,19 @@ namespace CitizenPortal.Controllers
         {
             WsFederationConfiguration fc = FederatedAuthentication.FederationConfiguration.WsFederationConfiguration;
 
-            string request = System.Web.HttpContext.Current.Request.Url.ToString();
-            string wreply = request.Substring(0, request.Length - 7);
+            string wreply = System.Web.HttpContext.Current.Request.UrlReferrer.ToString(); 
 
             SignOutRequestMessage soMessage = new SignOutRequestMessage(new Uri(fc.Issuer), wreply);
             soMessage.SetParameter("wtrealm", fc.Realm);
 
             FederatedAuthentication.SessionAuthenticationModule.SignOut();
             Response.Redirect(soMessage.WriteQueryString());
-
-            Response.Redirect("/Home/Index");
         }
 
         //
         // POST: /Admin
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Index(ConfigEntity model)
         {
             if (ModelState.IsValid)

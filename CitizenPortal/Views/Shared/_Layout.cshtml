@@ -26,8 +26,6 @@
         }
     </title>
 
-    <link rel="icon" href="@Url.Content("~/Content/Images/Favicon.png")" type="image/png">
-
     @Styles.Render("~/bundles/foundation/style")
     @Styles.Render("~/bundles/style")
 
@@ -71,35 +69,12 @@
                 <div class="row">
                     <div class="twelve columns">
                         <ul class="nav-bar">
-                            @if (DataHelper.AllDatasets != null && DataHelper.AllDatasets.Count > 0)
-                            {
-                                <li><a href="@Url.Action("Index", "Data")" id="dataButton">@_Layout.Data</a></li>
-                            }
-
-                            @if (!string.IsNullOrEmpty(ConfigHelper.Config.LicenseText) || !string.IsNullOrEmpty(ConfigHelper.Config.LicenseImageUrl))
-                            {
-                                <li><a href="@Url.Action("Index", "License")">@_Layout.License</a></li>
-                            }
-
-                            @if (!string.IsNullOrEmpty(ConfigHelper.Config.ApproachText) || !string.IsNullOrEmpty(ConfigHelper.Config.ApproachImageUrl))
-                            {
-                                <li><a href="@Url.Action("Index", "Approach")">@_Layout.Approach</a></li>
-                            }
-
-                            @if (!string.IsNullOrEmpty(ConfigHelper.Config.Applications))
-                            {
-                                <li><a href="@Url.Action("Index", "Applications")">@_Layout.Applications</a></li>
-                            }
-
-                            @if (!string.IsNullOrEmpty(ConfigHelper.Config.DataBrowserUrl))
-                            {
-                                <li><a href="@ConfigHelper.Config.DataBrowserUrl" target="_blank">@_Layout.Developpers</a></li>
-                            }
-
-                            @if (!string.IsNullOrEmpty(ConfigHelper.Config.ContactEmail))
-                            {
-                                <li><a href="@Url.Action("Index", "Contact")">@_Layout.Contact</a></li>
-                            }
+                            <li><a href="@Url.Action("Index", "Data")" id="dataButton">@_Layout.Data</a></li>
+                            <li><a href="@Url.Action("Index", "License")">@_Layout.License</a></li>
+                            <li><a href="@Url.Action("Index", "Approach")">@_Layout.Approach</a></li>
+                            <li><a href="@Url.Action("Index", "Applications")">@_Layout.Applications</a></li>
+                            <li><a href="@(ConfigHelper.Config.DataBrowserUrl ?? "http://ogdifrance.cloudapp.net")" target="_blank">@_Layout.Developpers</a></li>
+                            <li><a href="@Url.Action("Index", "Contact")">@_Layout.Contact</a></li>
                         </ul>
                     </div>
                 </div>

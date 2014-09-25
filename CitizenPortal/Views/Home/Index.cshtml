@@ -24,7 +24,7 @@
         @if (!string.IsNullOrEmpty(ConfigHelper.Config.HomeImageUrl))
         {
             <div class="row">
-                <div class="twelve columns centered">
+                <div class="twelve columns">
                     <img src="@ConfigHelper.Config.HomeImageUrl" alt="Home image" />
                 </div>
             </div>
@@ -43,51 +43,42 @@
 
         <div id="homeBlocks" class="row">
             <div id="homeBlockData" class="homeBlock four columns">
-                @if (DataHelper.AllDatasets != null && DataHelper.AllDatasets.Count > 0)
-                {
-                    <div class="icon"></div>
-                    <div class="title">
-                        <h5>@Index.DataBlockTitle</h5>
+                <div class="icon"></div>
+                <div class="title">
+                    <h5>@Index.DataBlockTitle</h5>
+                </div>
+                <div class="content">
+                    <p><span class="accentuated">Découvrez et téléchargez</span> en toute simplicité les jeux de données. Des outils de visualisation accompagnent chaque lot de données.</p>
+                    <div class="go">
+                        <img src="~/Content/Images/Go.png" />
                     </div>
-                    <div class="content">
-                        <p><span class="accentuated">Découvrez et téléchargez</span> en toute simplicité les jeux de données. Des outils de visualisation accompagnent chaque lot de données.</p>
-                        <div class="go">
-                            <img src="~/Content/Images/Go.png" />
-                        </div>
-                    </div>
-                }
+                </div>
             </div>
 
             <div id="homeBlockApp" class="homeBlock four columns">
-                @if (!string.IsNullOrEmpty(ConfigHelper.Config.Applications))
-                {
-                    <div class="icon"></div>
-                    <div class="title">
-                        <h5>@Index.AppBlockTitle</h5>
+                <div class="icon"></div>
+                <div class="title">
+                    <h5>@Index.AppBlockTitle</h5>
+                </div>
+                <div class="content">
+                    <p><span class="accentuated">Simplifiez-vous la vie</span> grâce aux applications mobiles développés à partir des bases de données et partagez vos propres créations.</p>
+                    <div class="go">
+                        <img src="~/Content/Images/Go.png" />
                     </div>
-                    <div class="content">
-                        <p><span class="accentuated">Simplifiez-vous la vie</span> grâce aux applications mobiles développés à partir des bases de données et partagez vos propres créations.</p>
-                        <div class="go">
-                            <img src="~/Content/Images/Go.png" />
-                        </div>
-                    </div>
-                }
+                </div>
             </div>
 
             <div id="homeBlockSupport" class="homeBlock four columns">
-                @if (!string.IsNullOrEmpty(ConfigHelper.Config.ContactEmail))
-                {
-                    <div class="icon"></div>
-                    <div class="title">
-                        <h5>@Index.SupportBlockTitle</h5>
+                <div class="icon"></div>
+                <div class="title">
+                    <h5>@Index.SupportBlockTitle</h5>
+                </div>
+                <div class="content">
+                    <p><span class="accentuated">Pour vous accompagner</span> dans la navigation et l'utilisation de ce portail open data, cet espace vous permet d'échanger directement avec notre équipe.</p>
+                    <div class="go">
+                        <img src="~/Content/Images/Go.png" />
                     </div>
-                    <div class="content">
-                        <p><span class="accentuated">Pour vous accompagner</span> dans la navigation et l'utilisation de ce portail open data, cet espace vous permet d'échanger directement avec notre équipe.</p>
-                        <div class="go">
-                            <img src="~/Content/Images/Go.png" />
-                        </div>
-                    </div>
-                }
+                </div>
             </div>
         </div>
     </div>

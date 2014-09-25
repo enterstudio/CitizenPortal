@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft France")]
 [assembly: AssemblyProduct("CitizenPortal")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de révision et de build par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

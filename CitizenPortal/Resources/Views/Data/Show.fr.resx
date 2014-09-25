@@ -216,4 +216,10 @@
   <data name="RateCancel" xml:space="preserve">
     <value>Annuler mon vote</value>
   </data>
+  <data name="ColumnDisplayed" xml:space="preserve">
+    <value>Selectionner ou désélectionner les colonnes à afficher dans le tableau</value>
+  </data>
+  <data name="DownloadRDFTitle" xml:space="preserve">
+    <value>Télécharger les données au format RDF</value>
+  </data>
 </root>
